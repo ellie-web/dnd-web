@@ -1,11 +1,10 @@
+<script setup>
+</script>
+
 <template>
-  <router-view />
+  <router-view/>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<style scoped>
 
-export default defineComponent({
-  name: 'App'
-})
-</script>
+</style>
