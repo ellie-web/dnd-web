@@ -1,10 +1,10 @@
 // app/services/session.server.ts
-import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookieSessionStorage } from "@remix-run/node"
 
 // export the whole sessionStorage object
-export let sessionStorage = createCookieSessionStorage({
+export let playerSessionStorage = createCookieSessionStorage({
   cookie: {
-    name: "_session", // use any name you want here
+    name: "dnd_player_session", // use any name you want here
     sameSite: "lax", // this helps with CSRF
     path: "/", // remember to add this so the cookie will work in all routes
     httpOnly: true, // for security reasons, make this cookie http only
@@ -14,9 +14,4 @@ export let sessionStorage = createCookieSessionStorage({
 });
 
 // you can also export the methods individually for your own usage
-export let { getSession, commitSession, destroySession } = sessionStorage;
-
-export type User = {
-  name: string
-  token: string
-}
+export let { getSession, commitSession, destroySession } = playerSessionStorage
