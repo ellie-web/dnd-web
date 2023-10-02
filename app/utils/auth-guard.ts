@@ -11,6 +11,22 @@ const publicRoutes = [
   '/game-master/registration'
 ]
 
+export type AuthT = {
+  gm: {
+      id: number;
+      name: string;
+      password: string;
+  };
+  player?: undefined;
+} | {
+  player: {
+      id: number;
+      name: string;
+      password: string;
+  };
+  gm?: undefined;
+}
+
 export default async function authGuard(args: LoaderFunctionArgs) {
   const url = new URL(args.request.url)
 
@@ -19,7 +35,7 @@ export default async function authGuard(args: LoaderFunctionArgs) {
     if (url.pathname !== '/game-master/dashboard') {
       throw redirect('/game-master/dashboard')
     }
-    return {gm}
+    return {gm} as AuthT
   }
 
   const player = await playerAuthenticator.isAuthenticated(args.request)
@@ -27,7 +43,7 @@ export default async function authGuard(args: LoaderFunctionArgs) {
     if (url.pathname !== '/player/character') {
       throw redirect('/player/character')
     }
-    return {player}
+    return {player} as AuthT
   }
 
   

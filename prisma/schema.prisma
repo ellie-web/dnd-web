@@ -11,9 +11,24 @@ datasource db {
 }
 
 model Player {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  password  String
+  character Character?
+}
+
+model Character {
   id       Int    @id @default(autoincrement())
-  name     String @unique
-  password String
+  name     String
+  player   Player @relation(fields: [playerId], references: [id])
+  playerId Int    @unique
+
+  strength     Int
+  dexterity    Int
+  constitution Int
+  intelligence Int
+  wisdom       Int
+  charisma     Int
 }
 
 model GameMaster {

@@ -2,6 +2,7 @@ import type { ActionFunction, LoaderFunction, LoaderFunctionArgs } from "@remix-
 import { Form, Link } from "@remix-run/react";
 import bcrypt from 'bcryptjs'
 import { prisma } from "~/db.server";
+import { createCharacter } from "~/models/character.server";
 import playerAuthenticator from "~/services/player-auth.server";
 import authGuard from "~/utils/auth-guard";
 
@@ -17,12 +18,19 @@ export const action: ActionFunction = async ({request}) => {
   const salt = await bcrypt.genSalt(10)
   const hashedPwd = await bcrypt.hash(password, salt)
 
-  await prisma.player.create({
-    data: {
-      name,
-      password: hashedPwd
-    },
-  });
+  try {
+    const player = await prisma.player.create({
+      data: {
+        name,
+        password: hashedPwd
+      },
+    });
+
+    await createCharacter(player.id)
+  }
+  catch (err) {
+    console.log('Error creating player')
+  }
 
   // const allUsers = await prisma.user.findMany()
   // console.log(allUsers)
