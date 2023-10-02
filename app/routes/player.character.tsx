@@ -41,6 +41,10 @@ const PlayerCharacterPage = () => {
     socket.on("confirmation", (data) => {
       console.log(data)
     })
+
+    socket.on("player:changed", (data) => {
+      console.log("player:changed", data)
+    })
   }, [socket])
 
   return (

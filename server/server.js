@@ -5,6 +5,11 @@ import express, { static as expressStatic } from "express";
 import morgan from "morgan";
 import { Server } from "socket.io";
 import * as build from "../build/index.js";
+import getCookieValue from "./utils/get-cookie-value.js"
+import parseJWT from "./utils/parse-jwt.js"
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 const MODE = process.env.NODE_ENV;
 
@@ -24,9 +29,13 @@ io.on("connection", (socket) => {
 
   socket.emit("confirmation", "connected!");
 
-  socket.on("event", (data) => {
-    console.log(socket.id, data);
-    socket.emit("event", "pong");
+  socket.on("gm:change-player", (data) => {
+    // const token = getCookieValue(socket.handshake.headers.cookie, 'dnd_player_session')
+    
+    // let player = await prisma.player.findUnique({ where: { id: parseJWT(token).user.id} })
+
+    console.log("gm:change-player", data);
+    io.emit("player:changed", data);
   });
 });
 
